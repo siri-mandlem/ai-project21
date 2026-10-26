@@ -56,3 +56,19 @@ main { padding-top: 52px; } .page-heading { margin-bottom: 28px; } .page-heading
 .inline-form, .form-grid { display: grid; grid-template-columns: 1.3fr auto auto; gap: 10px; align-items: center; } .form-grid { grid-template-columns: repeat(2, 1fr); } input, select { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px 13px; color: var(--ink); background: #fbfcff; font: inherit; } input:focus, select:focus { outline: 3px solid rgba(108, 99, 255, .12); border-color: var(--purple); }
 .item-card { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: #fbfcff; } .item-card > div { flex: 1; } .item-card .icon-button { margin-left: auto; } .color-dot { width: 10px; height: 10px; border-radius: 50%; } .icon-button { border: 0; border-radius: 8px; padding: 7px 10px; color: #bd4560; background: #fff0f2; cursor: pointer; } .empty { padding: 24px 0; color: var(--muted); text-align: center; }
 @media (max-width: 760px) { .landing { margin: 5vh 16px; padding: 34px 24px; } .app-shell { padding: 14px 16px 40px; } .topbar { align-items: flex-start; flex-wrap: wrap; } nav { order: 3; width: 100%; justify-content: space-between; } .stats-grid, .form-grid, .inline-form { grid-template-columns: 1fr; } .panel-heading { align-items: flex-start; flex-direction: column; } .progress-row { grid-template-columns: 1fr; gap: 10px; } }
+
+/* Legacy pages share the same visual language as the newer StudyFlow screens. */
+body > header { max-width: 1180px; margin: 0 auto; padding: 42px 26px 18px; background: transparent; text-align: left; }
+body > header h1 { margin: 0; color: var(--ink); font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -.06em; }
+body > nav { max-width: 1180px; margin: 0 auto; padding: 0 26px 20px; border-bottom: 1px solid var(--line); }
+body > nav ul { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin: 0; padding: 0; list-style: none; }
+body > nav li { margin: 0; }
+body > nav a { color: var(--muted); font-size: .9rem; font-weight: 650; text-decoration: none; }
+body > nav a:hover { color: var(--purple); }
+body > main:not(.landing) { max-width: 1180px; margin: 0 auto; padding: 48px 26px 60px; }
+body > main > form { max-width: 480px; display: grid; gap: 10px; padding: 28px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: 0 16px 40px rgba(42, 52, 100, .07); }
+body > main > form label { margin-top: 7px; color: var(--muted); font-size: .82rem; font-weight: 750; }
+body > main > form button { margin-top: 10px; }
+.form-note { max-width: 480px; color: var(--muted); font-size: .9rem; }
+.form-note a { color: var(--purple); font-weight: 700; text-decoration: none; }
+body > footer { max-width: 1180px; margin: 0 auto; padding: 20px 26px; border-top: 1px solid var(--line); color: var(--muted); background: transparent; text-align: left; }

@@ -24,4 +24,13 @@
     <main>
         <form id="register-form" action="/api/register" method="POST">
             <label for="username">Username:</label>
-            <input type="text" id="
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" minlength="8" required>
+            <button class="button primary" type="submit">Create account</button>
+        </form>
+        <p class="form-note">Already have an account? <a href="/login">Sign in</a></p>
+    </main>
+    <footer><p>StudyFlow · Make every study hour count.</p></footer>
+</body>
+</html>

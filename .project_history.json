@@ -242,8 +242,52 @@
     ],
     "project_id": "project21"
   },
-  "deployment": {},
+  "deployment": {
+    "status": "deployed",
+    "neon": {
+      "success": true,
+      "connection_uri": "postgresql://neondb_owner:npg_LJ5Zg7jhGkfU@ep-shiny-wave-b4xv09ie-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+      "project_id": "",
+      "console_url": "https://console.neon.tech",
+      "tables": [
+        "book_issues",
+        "books",
+        "cart",
+        "dashboards",
+        "goals",
+        "order_items",
+        "orders",
+        "products",
+        "progress",
+        "sessions",
+        "subjects",
+        "users"
+      ],
+      "table_count": 12
+    },
+    "github": {
+      "repo_name": "ai-project21",
+      "repo_url": "https://github.com/siri-mandlem/ai-project21",
+      "clone_url": "https://github.com/siri-mandlem/ai-project21.git",
+      "owner": "siri-mandlem"
+    },
+    "render": {
+      "success": true,
+      "service_id": "srv-dbfpb8t9el5s73a7q37g",
+      "deploy_id": "dep-dbfpb9d9el5s73a7q4mg",
+      "service_name": "ai-project21",
+      "url": "https://ai-project21.onrender.com",
+      "dashboard_url": "https://dashboard.render.com/web/srv-dbfpb8t9el5s73a7q37g"
+    },
+    "summary": {
+      "title": "Your Application is Live on Render!",
+      "description": "The database schema was applied to Neon, code pushed to GitHub, and Render confirmed the web service is live."
+    },
+    "message": "Deployment is live at https://ai-project21.onrender.com",
+    "updated_at": "2026-10-26T18:03:01.232382+00:00",
+    "url": "https://ai-project21.onrender.com"
+  },
   "status": "partial",
   "created_at": "2026-10-26T16:42:12.920936+00:00",
-  "updated_at": "2026-10-26T17:11:18.671607+00:00"
+  "updated_at": "2026-10-26T18:03:01.237569+00:00"
 }
