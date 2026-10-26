@@ -1,0 +1,82 @@
+{
+  "manifest_version": 1,
+  "project_name": "functional_requirements",
+  "backend": {
+    "framework": "Flask",
+    "application": "backend.app:app",
+    "files": [
+      "backend/app.py",
+      "backend/config.py",
+      "backend/models.py",
+      "backend/requirements.txt",
+      "backend/routes.py"
+    ]
+  },
+  "frontend": {
+    "files": [
+      "frontend/css/style.css",
+      "frontend/dashboard.html",
+      "frontend/goals.html",
+      "frontend/index.html",
+      "frontend/js/script.js",
+      "frontend/login.html",
+      "frontend/progress.html",
+      "frontend/register.html",
+      "frontend/schedule.html",
+      "frontend/subjects.html"
+    ],
+    "pages": [
+      "/",
+      "/dashboard",
+      "/goals",
+      "/login",
+      "/progress",
+      "/register",
+      "/schedule",
+      "/subjects"
+    ]
+  },
+  "database": {
+    "schema_file": "database/schema.sql",
+    "tables": [
+      "dashboards",
+      "goals",
+      "progress",
+      "sessions",
+      "subjects",
+      "users"
+    ]
+  },
+  "api_contracts": [],
+  "dependencies": [
+    "Flask",
+    "Flask-SQLAlchemy",
+    "gunicorn",
+    "psycopg2-binary"
+  ],
+  "required_files": [
+    ".env.example",
+    "README.md",
+    "backend/__init__.py",
+    "backend/app.py",
+    "backend/config.py",
+    "backend/models.py",
+    "backend/requirements.txt",
+    "backend/routes.py",
+    "database/schema.sql",
+    "frontend/css/style.css",
+    "frontend/dashboard.html",
+    "frontend/goals.html",
+    "frontend/index.html",
+    "frontend/js/script.js",
+    "frontend/login.html",
+    "frontend/progress.html",
+    "frontend/register.html",
+    "frontend/schedule.html",
+    "frontend/subjects.html",
+    "project_manifest.json",
+    "tests/test_smoke.py"
+  ],
+  "generation_status": "completed",
+  "generation_message": "Completed and aligned for Neon PostgreSQL, GitHub, and Render deployment."
+}

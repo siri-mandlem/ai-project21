@@ -1,0 +1,249 @@
+{
+  "project_id": "project21",
+  "title": "Create a Student Study Planner with features to add, view, edit, and delete subj",
+  "prompt": "Create a Student Study Planner with features to add, view, edit, and delete subjects, set daily study goals, and schedule study sessions. Include a dashboard to track completed study hours, pending tasks, and subject-wise progress.",
+  "requirements": "## Functional Requirements\n- Add, view, edit, and delete subjects.\n- Set and view daily study goals.\n- Schedule and manage study sessions.\n- Track completed study hours and subject-wise progress on a dashboard.\n\n## Non-Functional Requirements\n- Performance: Support real-time updates and quick response times for user interactions.\n- Security: Implement authentication and authorization mechanisms to protect user data.\n- Usability: Ensure intuitive navigation and user-friendly interface.\n\n## Actors\n- Student\n- Teacher\n\n## Modules\n- User Management\n- Subject Management\n- Goal Setting\n- Session Scheduling\n- Progress Tracking",
+  "architecture": {
+    "architecture_diagram": "graph LR\n\nUserManagement --> Authentication\n\nSubjectManagement --> UserManagement\n\nGoalSetting --> UserManagement\n\nSessionScheduling --> UserManagement\n\nProgressTracking --> UserManagement\n\nUserManagement --> Dashboard\n\nAuthentication --> SubjectManagement\n\nAuthentication --> GoalSetting\n\nAuthentication --> SessionScheduling\n\nAuthentication --> ProgressTracking"
+  },
+  "database": {
+    "tables": [
+      {
+        "table_name": "users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "username",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "password",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(50)",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "subjects",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "goals",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "subject_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "subjects.id"
+          },
+          {
+            "name": "daily_goal",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "sessions",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "subject_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "subjects.id"
+          },
+          {
+            "name": "session_date",
+            "type": "DATE",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "study_hours",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "progress",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "subject_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "subjects.id"
+          },
+          {
+            "name": "progress",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "dashboards",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          }
+        ]
+      }
+    ],
+    "erd": "erDiagram\n\nUSERS {\n        int id PK\n        string username\n        string password\n        string role\n}\n\nSUBJECTS {\n        int id PK\n        string name\n}\n\nGOALS {\n        int id PK\n        int user_id FK\n        int subject_id FK\n        int daily_goal\n}\n\nSESSIONS {\n        int id PK\n        int user_id FK\n        int subject_id FK\n        datetime session_date\n        int study_hours\n}\n\nPROGRESS {\n        int id PK\n        int user_id FK\n        int subject_id FK\n        int progress\n}\n\nDASHBOARDS {\n        int id PK\n        int user_id FK\n}\n\nUSERS ||--o{ GOALS : user_id\n\nSUBJECTS ||--o{ GOALS : subject_id\n\nUSERS ||--o{ SESSIONS : user_id\n\nSUBJECTS ||--o{ SESSIONS : subject_id\n\nUSERS ||--o{ PROGRESS : user_id\n\nSUBJECTS ||--o{ PROGRESS : subject_id\n\nUSERS ||--o{ DASHBOARDS : user_id",
+    "sql_schema": "CREATE TABLE \"users\" (\n    \"id\" SERIAL,\n    \"username\" VARCHAR(100),\n    \"password\" VARCHAR(100),\n    \"role\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"subjects\" (\n    \"id\" SERIAL,\n    \"name\" VARCHAR(100),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"goals\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"daily_goal\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"sessions\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"session_date\" DATE,\n    \"study_hours\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"progress\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"progress\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"dashboards\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nALTER TABLE \"goals\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"goals\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"sessions\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"sessions\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"progress\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"progress\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"dashboards\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");"
+  },
+  "backend": {
+    "structure": "1. **Backend Technology Stack**\n   - **Database**: PostgreSQL (for its robustness, scalability, and wide ecosystem support)\n   - **ORM**: SQLAlchemy (for ORM capabilities and database abstraction)\n   - **Framework**: Flask (for its lightweight nature and ease of integration with SQLAlchemy)\n   - **Authentication**: Flask-Login (for user session management) and JWT (for secure token-based authentication)\n   - **ORM**: Marshmallow (for serialization and deserialization of data)\n   - **Testing**: Flask-Testing (for testing web applications)\n   - **Database Management**: psycopg2 (for PostgreSQL database interactions)\n   - **Security**: Flask-Security (for additional security features like password hashing and role-based access control)\n   - **Logging**: Flask-Logging (for logging application events)\n   - **CORS**: Flask-CORS (for handling Cross-Origin Resource Sharing)\n\n2. **Backend Folder Structure**\n   ```\n   backend/\n   ├── config/\n   │   ├── __init__.py\n   │   ├── config.py\n   │   └── development.py\n   ├── models/\n   │   ├── __init__.py\n   │   ├── users.py\n   │   ├── subjects.py\n   │   ├── goals.py\n   │   ├── sessions.py\n   │   └── progress.py\n   ├── services/\n   │   ├── __init__.py\n   │   ├── user_management.py\n   │   ├── subject_management.py\n   │   ├── goal_setting.py\n   │   ├── session_scheduling.py\n   │   └── progress_tracking.py\n   ├── api/\n   │   ├── __init__.py\n   │   ├── users.py\n   │   ├── subjects.py\n   │   ├── goals.py\n   │   ├── sessions.py\n   │   └── progress.py\n   ├── tests/\n   │   ├── __init__.py\n   │   ├── users.py\n   │   ├── subjects.py\n   │   ├── goals.py\n   │   ├── sessions.py\n   │   └── progress.py\n   ├── utils/\n   │   ├── __init__.py\n   │   ├── helpers.py\n   │   └── serializers.py\n   ├── migrations/\n   │   ├── __init__.py\n   │   └── init.py\n   ├── run.py\n   ├── requirements.txt\n   ├── Dockerfile\n   ├── Docker-compose.yml\n   ├── README.md\n   ```\n\n3. **Backend Modules**\n   - **User Management**: Handles user registration, login, and user-related operations.\n   - **Subject Management**: Manages the creation, viewing, editing, and deletion of subjects.\n   - **Goal Setting**: Allows users to set and view their daily study goals.\n   - **Session Scheduling**: Manages the scheduling and management of study sessions.\n   - **Progress Tracking**: Tracks completed study hours and subject-wise progress on a dashboard."
+  },
+  "frontend": {
+    "tech_stack": "Frontend Technology Stack:\n- HTML\n- CSS\n- JavaScript",
+    "structure": "1. Frontend Technology Stack\n   - **Frontend Framework**: React (for its robustness, extensive ecosystem, and ease of use)\n   - **State Management**: Redux (for managing application state)\n   - **Authentication**: JWT (for secure token-based authentication)\n   - **ORM**: Axios (for making HTTP requests to the backend)\n   - **UI Libraries**: Material-UI (for a consistent and modern UI)\n   - **Testing**: Jest (for unit testing) and React Testing Library (for component testing)\n   - **Database Management**: Axios (for making HTTP requests to the backend)\n   - **Security**: Helmet (for securing HTTP headers)\n   - **CORS**: Axios (for handling Cross-Origin Resource Sharing)\n   - **Logging**: Console (for logging application events)\n   - **UI Framework**: Material-UI (for a consistent and modern UI)\n\n2. Frontend Folder Structure\n   ```\n   frontend/\n   ├── public/\n   │   └── index.html\n   ├── src/\n   │   ├── components/\n   │   │   ├── Dashboard.js\n   │   │   ├── SubjectManagement.js\n   │   │   ├── GoalSetting.js\n   │   │   ├── SessionScheduling.js\n   │   │   └── ProgressTracking.js\n   │   ├── services/\n   │   │   ├── AuthService.js\n   │   │   ├── SubjectService.js\n   │   │   ├── GoalService.js\n   │   │   └── SessionService.js\n   │   ├── utils/\n   │   │   ├── AuthService.js\n   │   │   ├── SubjectService.js\n   │   │   └── GoalService.js\n   │   ├── App.js\n   │   ├── index.js\n   │   ├── styles/\n   │   │   ├── global.css\n   │   │   └── dashboard.css\n   │   └── tests/\n   │       ├── AuthService.test.js\n   │       ├── SubjectService.test.js\n   │       └── GoalService.test.js\n   ├── Dockerfile\n   ├── Docker-compose.yml\n   ├── README.md\n   ```\n\n3. Frontend Pages\n   - **Dashboard**: Displays user progress and overview.\n   - **Subject Management**: Allows users to add, view, edit, and delete subjects.\n   - **Goal Setting**: Enables users to set and view their daily study goals.\n   - **Session Scheduling**: Manages the scheduling and management of study sessions.\n   - **Progress Tracking**: Tracks completed study hours and subject-wise progress on a dashboard.",
+    "pages": "1. login.html - User login page\n2. register.html - User registration page\n3. dashboard.html - Overview of study progress and goals\n4. subjects.html - Manage and view subjects\n5. goals.html - Set and view daily study goals\n6. schedule.html - Schedule and manage study sessions\n7. progress.html - Track and view completed study hours"
+  },
+  "project": {
+    "success": true,
+    "partial": true,
+    "message": "Project code generation stopped at the 15-minute limit. The generated files were saved successfully; review and align the files before deploying.",
+    "project_path": "D:\\html.siri\\AI-Software-Engineering-Platform\\generated_projects\\project21",
+    "backend_generated": true,
+    "frontend_generated": true,
+    "files": [
+      {
+        "name": "config.py",
+        "path": "backend/config.py",
+        "content": "from flask import Flask\nfrom flask_sqlalchemy import SQLAlchemy\nfrom flask_login import LoginManager\nfrom flask_cors import CORS\nfrom flask_bcrypt import Bcrypt\nfrom flask_marshmallow import Marshmallow\nfrom flask_jwt_extended import JWTManager\nfrom flask_sqlalchemy import SQLAlchemy\nfrom flask_cors import CORS\nfrom flask_login import LoginManager\nfrom flask_bcrypt import Bcrypt\nfrom flask_marshmallow import Marshmallow\nfrom flask_jwt_extended import JWTManager\n\napp = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/functional_requirements'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nlogin_manager = LoginManager(app)\nlogin_manager.login_view = 'login'\nbcrypt = Bcrypt(app)\nma = Marshmallow(app)\njwt = JWTManager(app)\nCORS(app, resources={r'/*': {'origins': '*'}})\n\n@login_manager.user_loader\ndef load_user(user_id):\n    return User.query.get(int(user_id))\n\ndef init_app(app):\n    init_db(app)\n    init_login_manager(app)\n    init_cors(app)\n    init_bcrypt(app)\n    init_marshmallow(app)\n    init_jwt(app)\n"
+      },
+      {
+        "name": "models.py",
+        "path": "backend/models.py",
+        "content": "from flask_sqlalchemy import SQLAlchemy\nfrom flask_login import UserMixin\nfrom flask_bcrypt import Bcrypt\nfrom flask_jwt_extended import jwt_required, get_jwt_identity\nfrom flask_marshmallow import Marshmallow\nfrom datetime import datetime\n\ndb = SQLAlchemy()\nbcrypt = Bcrypt()\n\nclass User(UserMixin, db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    username = db.Column(db.String(80), unique=True, nullable=False)\n    password = db.Column(db.String(120), nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\nclass Goal(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)\n    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)\n    progress = db.Column(db.Integer, nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\nclass Subject(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    name = db.Column(db.String(100), nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\nclass Session(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)\n    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)\n    start_time = db.Column(db.DateTime, nullable=False)\n    end_time = db.Column(db.DateTime, nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\nclass Progress(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)\n    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)\n    study_hours = db.Column(db.Integer, nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\nclass Dashboards(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\ndef init_db(app):\n    db.init_app(app)\n    db.create_all()\n\ndef init_login_manager(app):\n    login_manager.init_app(app)\n\ndef init_cors(app):\n    CORS(app, resources={r'/*': {'origins': '*'}})\n\ndef init_bcrypt(app):\n    bcrypt.init_app(app)\n\ndef init_marshmallow(app):\n    ma.init_app(app)\n\ndef init_jwt(app):\n    jwt.init_app(app)\n"
+      },
+      {
+        "name": "requirements.txt",
+        "path": "backend/requirements.txt",
+        "content": "Flask\nFlask-SQLAlchemy\ngunicorn\npsycopg2-binary\nFlask\nFlask-SQLAlchemy\ngunicorn\n"
+      },
+      {
+        "name": "routes.py",
+        "path": "backend/routes.py",
+        "content": "from flask import Blueprint, jsonify, request\nfrom backend.models import db, User, Goal, Subject, Session, Progress, Dashboards\nfrom backend.utils import token_required\n\ngoals_bp = Blueprint('goals', __name__)\ndashboards_bp = Blueprint('dashboards', __name__)\n\n@goals_bp.route('/goals', methods=['POST'])\n@token_required\ndef create_goal(current_user):\n    data = request.get_json()\n    new_goal = Goal(user_id=current_user.id, **data)\n    db.session.add(new_goal)\n    db.session.commit()\n    return jsonify({'message': 'Goal created successfully'}), 201\n\n@goals_bp.route('/goals', methods=['GET'])\n@token_required\ndef get_goals(current_user):\n    goals = Goal.query.filter_by(user_id=current_user.id).all()\n    return jsonify([goal.to_dict() for goal in goals]), 200\n\n@goals_bp.route('/goals/<int:goal_id>', methods=['PUT'])\n@token_required\ndef update_goal(current_user, goal_id):\n    goal = Goal.query.get(goal_id)\n    if goal.user_id != current_user.id:\n        return jsonify({'message': 'Not authorized'}), 403\n    data = request.get_json()\n    goal.progress = data.get('progress')\n    db.session.commit()\n    return jsonify({'message': 'Goal updated successfully'}), 200\n\n@goals_bp.route('/goals/<int:goal_id>', methods=['DELETE'])\n@token_required\ndef delete_goal(current_user, goal_id):\n    goal = Goal.query.get(goal_id)\n    if goal.user_id != current_user.id:\n        return jsonify({'message': 'Not authorized'}), 403\n    db.session.delete(goal)\n    db.session.commit()\n    return jsonify({'message': 'Goal deleted successfully'}), 200\n\n@dashboards_bp.route('/dashboards', methods=['GET'])\n@token_required\ndef get_dashboards(current_user):\n    dashboards = Dashboards.query.filter_by(user_id=current_user.id).all()\n    return jsonify([dashboard.to_dict() for dashboard in dashboards]), 200\n\n# Add more routes for other models as needed\n"
+      },
+      {
+        "name": "schema.sql",
+        "path": "database/schema.sql",
+        "content": "CREATE TABLE \"users\" (\n    \"id\" SERIAL,\n    \"username\" VARCHAR(100),\n    \"password\" VARCHAR(100),\n    \"role\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"subjects\" (\n    \"id\" SERIAL,\n    \"name\" VARCHAR(100),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"goals\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"daily_goal\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"sessions\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"session_date\" DATE,\n    \"study_hours\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"progress\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"subject_id\" INT,\n    \"progress\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"dashboards\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    PRIMARY KEY (\"id\")\n);\n\nALTER TABLE \"goals\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"goals\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"sessions\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"sessions\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"progress\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"progress\" ADD FOREIGN KEY (\"subject_id\") REFERENCES \"subjects\" (\"id\");\n\nALTER TABLE \"dashboards\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n"
+      },
+      {
+        "name": "style.css",
+        "path": "frontend/css/style.css",
+        "content": "/* Add your CSS styles here */\nbody {\n    font-family: Arial, sans-serif;\n}\nheader {\n    background-color: #f8f9fa;\n    padding: 10px;\n    text-align: center;\n}\nnav ul {\n    list-style: none;\n    padding: 0;\n}\nnav ul li {\n    display: inline;\n    margin-right: 10px;\n}\nnav ul li a {\n    color: #007bff;\n    text-decoration: none;\n    font-weight: bold;\n}\nnav ul li a:hover {\n    color: #0056b3;\n}\nmain {\n    padding: 20px;\n}\nfooter {\n    background-color: #f8f9fa;\n    padding: 10px;\n    text-align: center;\n}\n"
+      },
+      {
+        "name": "dashboard.html",
+        "path": "frontend/dashboard.html",
+        "content": "<!-- Add your HTML structure for the dashboard page here -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Dashboard</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <header>\n        <h1>Welcome to Your Dashboard</h1>\n    </header>\n    <nav>\n        <ul>\n            <li><a href=\"/\">Home</a></li>\n            <li><a href=\"/goals\">Goals</a></li>\n            <li><a href=\"/dashboards\">Dashboards</a></li>\n            <li><a href=\"/subjects\">Subjects</a></li>\n            <li><a href=\"/login\">Logout</a></li>\n        </ul>\n    </nav>\n    <main>\n        <!-- Add your dashboard content here -->\n    </main>\n    <footer>\n        <p>&copy; 2023 Your Company</p>\n    </footer>\n</body>\n</html>\n"
+      },
+      {
+        "name": "login.html",
+        "path": "frontend/login.html",
+        "content": "<!-- Add your HTML structure for the login page here -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Login</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <header>\n        <h1>Login</h1>\n    </header>\n    <nav>\n        <ul>\n            <li><a href=\"/\">Home</a></li>\n            <li><a href=\"/goals\">Goals</a></li>\n            <li><a href=\"/dashboards\">Dashboards</a></li>\n            <li><a href=\"/subjects\">Subjects</a></li>\n            <li><a href=\"/login\">Login</a></li>\n        </ul>\n    </nav>\n    <main>\n        <form action=\"/login\" method=\"POST\">\n            <label for=\"username\">Username:</label>\n            <input type=\"text\" id=\"username\" name=\"username\" required>\n            <label for=\"password\">Password:</label>\n            <input type=\"password\" id=\"password\" name=\"password\" required>\n            <button type=\"submit\">Login</button>\n        </form>\n    </main>\n    <footer>\n        <p>&copy; 2023 Your Company</p>\n    </footer>\n</body>\n</html>\n"
+      },
+      {
+        "name": "progress.html",
+        "path": "frontend/progress.html",
+        "content": "<!-- Add your HTML structure for the progress page here -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Progress</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <header>\n        <h1>Progress</h1>\n    </header>\n    <nav>\n        <ul>\n            <li><a href=\"/\">Home</a></li>\n            <li><a href=\"/goals\">Goals</a></li>\n            <li><a href=\"/dashboards\">Dashboards</a></li>\n            <li><a href=\"/subjects\">Subjects</a></li>\n            <li><a href=\"/login\">Logout</a></li>\n        </ul>\n    </nav>\n    <main>\n        <form action=\"/progress\" method=\"POST\">\n            <label for=\"study_hours\">Study Hours:</label>\n            <input type=\"number\" id=\"study_hours\" name=\"study_hours\" required>\n            <button type=\"submit\">Update Progress</button>\n        </form>\n    </main>\n    <footer>\n        <p>&copy; 2023 Your Company</p>\n    </footer>\n</body>\n</html>\n"
+      },
+      {
+        "name": "register.html",
+        "path": "frontend/register.html",
+        "content": "<!-- Add your HTML structure for the register page here -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Register</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <header>\n        <h1>Register</h1>\n    </header>\n    <nav>\n        <ul>\n            <li><a href=\"/\">Home</a></li>\n            <li><a href=\"/goals\">Goals</a></li>\n            <li><a href=\"/dashboards\">Dashboards</a></li>\n            <li><a href=\"/subjects\">Subjects</a></li>\n            <li><a href=\"/login\">Login</a></li>\n        </ul>\n    </nav>\n    <main>\n        <form action=\"/register\" method=\"POST\">\n            <label for=\"username\">Username:</label>\n            <input type=\"text\" id=\"\n"
+      },
+      {
+        "name": "project_manifest.json",
+        "path": "project_manifest.json",
+        "content": "{\n  \"manifest_version\": 1,\n  \"project_name\": \"functional_requirements\",\n  \"backend\": {\n    \"framework\": \"Flask\",\n    \"application\": \"backend.app:app\",\n    \"files\": [\n      \"backend/app.py\",\n      \"backend/config.py\",\n      \"backend/models.py\",\n      \"backend/requirements.txt\",\n      \"backend/routes.py\"\n    ]\n  },\n  \"frontend\": {\n    \"files\": [\n      \"frontend/css/style.css\",\n      \"frontend/dashboard.html\",\n      \"frontend/goals.html\",\n      \"frontend/index.html\",\n      \"frontend/js/script.js\",\n      \"frontend/login.html\",\n      \"frontend/progress.html\",\n      \"frontend/register.html\",\n      \"frontend/schedule.html\",\n      \"frontend/subjects.html\"\n    ],\n    \"pages\": [\n      \"/\",\n      \"/dashboard\",\n      \"/goals\",\n      \"/login\",\n      \"/progress\",\n      \"/register\",\n      \"/schedule\",\n      \"/subjects\"\n    ]\n  },\n  \"database\": {\n    \"schema_file\": \"database/schema.sql\",\n    \"tables\": [\n      \"dashboards\",\n      \"goals\",\n      \"progress\",\n      \"sessions\",\n      \"subjects\",\n      \"users\"\n    ]\n  },\n  \"api_contracts\": [],\n  \"dependencies\": [\n    \"Flask\",\n    \"Flask-SQLAlchemy\",\n    \"gunicorn\",\n    \"psycopg2-binary\"\n  ],\n  \"required_files\": [\n    \".env.example\",\n    \"README.md\",\n    \"backend/__init__.py\",\n    \"backend/app.py\",\n    \"backend/config.py\",\n    \"backend/models.py\",\n    \"backend/requirements.txt\",\n    \"backend/routes.py\",\n    \"database/schema.sql\",\n    \"frontend/css/style.css\",\n    \"frontend/dashboard.html\",\n    \"frontend/goals.html\",\n    \"frontend/index.html\",\n    \"frontend/js/script.js\",\n    \"frontend/login.html\",\n    \"frontend/progress.html\",\n    \"frontend/register.html\",\n    \"frontend/schedule.html\",\n    \"frontend/subjects.html\",\n    \"project_manifest.json\",\n    \"tests/test_smoke.py\"\n  ],\n  \"generation_status\": \"partial\",\n  \"generation_message\": \"Project code generation stopped at the 15-minute limit. The generated files were saved successfully; review and align the files before deploying.\"\n}\n"
+      }
+    ],
+    "project_id": "project21"
+  },
+  "deployment": {},
+  "status": "partial",
+  "created_at": "2026-10-26T16:42:12.920936+00:00",
+  "updated_at": "2026-10-26T17:11:18.671607+00:00"
+}
