@@ -243,7 +243,7 @@
     "project_id": "project21"
   },
   "deployment": {
-    "status": "failed",
+    "status": "deployed",
     "neon": {
       "success": true,
       "connection_uri": "postgresql://neondb_owner:npg_LJ5Zg7jhGkfU@ep-shiny-wave-b4xv09ie-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
@@ -274,7 +274,7 @@
     "render": {
       "success": true,
       "service_id": "srv-dbfpb8t9el5s73a7q37g",
-      "deploy_id": "dep-dbfpd37f3r2c7395seeg",
+      "deploy_id": "dep-dbg5jvks728c73devkdg",
       "service_name": "ai-project21",
       "url": "https://ai-project21.onrender.com",
       "dashboard_url": "https://dashboard.render.com/web/srv-dbfpb8t9el5s73a7q37g"
@@ -283,11 +283,11 @@
       "title": "Your Application is Live on Render!",
       "description": "The database schema was applied to Neon, code pushed to GitHub, and Render confirmed the web service is live."
     },
-    "message": "HTTPSConnectionPool(host='api.render.com', port=443): Max retries exceeded with url: /v1/services/srv-dbfpb8t9el5s73a7q37g/deploys/dep-dbg2j1cipgvc73eaiu4g (Caused by NewConnectionError(\"HTTPSConnection(host='api.render.com', port=443): Failed to establish a new connection: [WinError 10065] A socket operation was attempted to an unreachable host\"))",
-    "updated_at": "2026-10-27T04:33:40.448418+00:00",
+    "message": "Deployment is live at https://ai-project21.onrender.com",
+    "updated_at": "2026-10-27T08:00:58.301233+00:00",
     "url": "https://ai-project21.onrender.com"
   },
   "status": "partial",
   "created_at": "2026-10-26T16:42:12.920936+00:00",
-  "updated_at": "2026-10-27T04:33:40.486303+00:00"
+  "updated_at": "2026-10-27T08:00:58.311462+00:00"
 }

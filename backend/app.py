@@ -98,6 +98,15 @@ def init_database():
             statement = statement.strip()
             if statement:
                 cursor.execute(statement)
+        # The deployment database may already contain a users table created by
+        # an earlier version of this generated project. CREATE TABLE IF NOT
+        # EXISTS does not add columns to an existing table, so reconcile the
+        # column used by the current authentication code at startup.
+        if _is_postgres():
+            cursor.execute(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS role "
+                "VARCHAR(50) NOT NULL DEFAULT 'student'"
+            )
 
 
 def hash_password(password: str) -> str:
@@ -166,9 +175,11 @@ def register():
         return jsonify({"error": "Username must be 3+ characters and password 8+ characters."}), 400
     if query("SELECT id FROM users WHERE username = ?", (username,)):
         return jsonify({"error": "That username is already registered."}), 409
+    # Keep the insert compatible with older shared users tables. The role
+    # column is reconciled in init_database and has a database default.
     user = execute(
-        "INSERT INTO users (username, password, role) VALUES (?, ?, ?) RETURNING id, username",
-        (username, hash_password(password), "student"),
+        "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id, username",
+        (username, hash_password(password)),
         returning=True,
     ) if _is_postgres() else None
     if not _is_postgres():
