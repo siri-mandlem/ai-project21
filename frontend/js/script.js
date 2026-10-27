@@ -1,7 +1,7 @@
 const api = async (path, options = {}) => {
   const response = await fetch(`/api${path}`, { headers: { "Content-Type": "application/json" }, ...options });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || "Something went wrong.");
+  if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);
   return data;
 };
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));

@@ -5,7 +5,7 @@ import os
 import secrets
 import sqlite3
 from contextlib import contextmanager
-from datetime import date
+from datetime import date, datetime
 from functools import wraps
 from pathlib import Path
 
@@ -98,38 +98,25 @@ def init_database():
             statement = statement.strip()
             if statement:
                 cursor.execute(statement)
-        # The deployment database may already contain a users table created by
-        # an earlier version of this generated project. CREATE TABLE IF NOT
-        # EXISTS does not add columns to an existing table, so reconcile the
-        # column used by the current authentication code at startup.
-        if _is_postgres():
-            cursor.execute(
-                "ALTER TABLE users ADD COLUMN IF NOT EXISTS role "
-                "VARCHAR(50) NOT NULL DEFAULT 'student'"
-            )
-            compatibility_columns = {
-                "subjects": (
-                    "user_id INTEGER",
-                    "color VARCHAR(20) NOT NULL DEFAULT '#6c63ff'",
-                    "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
-                ),
-                "goals": (
-                    "title VARCHAR(160) NOT NULL DEFAULT 'Daily study goal'",
-                    "target_hours NUMERIC(6, 2) NOT NULL DEFAULT 1",
-                    "completed_hours NUMERIC(6, 2) NOT NULL DEFAULT 0",
-                    "goal_date DATE NOT NULL DEFAULT CURRENT_DATE",
-                ),
-                "sessions": (
-                    "title VARCHAR(160) NOT NULL DEFAULT 'Study session'",
-                    "start_time TIME",
-                    "duration_hours NUMERIC(6, 2) NOT NULL DEFAULT 1",
-                    "completed BOOLEAN NOT NULL DEFAULT FALSE",
-                    "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
-                ),
-            }
-            for table, columns in compatibility_columns.items():
+        # CREATE TABLE IF NOT EXISTS does not reconcile tables created by an
+        # older deployment. Keep the migration definitions nullable so they
+        # can also be added safely when legacy rows already exist.
+        compatibility_columns = {
+            "users": ("role VARCHAR(50)",),
+            "subjects": ("user_id INTEGER", "color VARCHAR(20)", "created_at TIMESTAMP"),
+            "goals": ("user_id INTEGER", "subject_id INTEGER", "title VARCHAR(160)", "target_hours NUMERIC(6, 2)", "completed_hours NUMERIC(6, 2)", "goal_date DATE"),
+            "sessions": ("user_id INTEGER", "subject_id INTEGER", "title VARCHAR(160)", "session_date DATE", "start_time TIME", "duration_hours NUMERIC(6, 2)", "completed BOOLEAN", "created_at TIMESTAMP"),
+        }
+        for table, columns in compatibility_columns.items():
+            if _is_postgres():
                 for column in columns:
                     cursor.execute(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {column}")
+            else:
+                existing = {row[1] for row in cursor.execute(f"PRAGMA table_info({table})").fetchall()}
+                for column in columns:
+                    name = column.split(" ", 1)[0]
+                    if name not in existing:
+                        cursor.execute(f"ALTER TABLE {table} ADD COLUMN {column}")
 
 
 def hash_password(password: str) -> str:
@@ -327,9 +314,20 @@ def sessions():
 def create_session():
     data = payload()
     required = ("subject_id", "session_date", "start_time", "duration_hours")
-    if any(not data.get(key) for key in required):
+    if any(data.get(key) in (None, "") for key in required):
         return jsonify({"error": "Subject, date, start time, and duration are required."}), 400
-    execute("INSERT INTO sessions (user_id, subject_id, title, session_date, start_time, duration_hours, completed) VALUES (?, ?, ?, ?, ?, ?, ?)", (current_user_id(), int(data["subject_id"]), data.get("title", "Study session"), data["session_date"], data["start_time"], float(data["duration_hours"]), bool(data.get("completed", False))))
+    try:
+        subject_id = int(data["subject_id"])
+        session_date = datetime.strptime(str(data["session_date"]), "%Y-%m-%d").date().isoformat()
+        start_time = datetime.strptime(str(data["start_time"]), "%H:%M").strftime("%H:%M")
+        duration_hours = float(data["duration_hours"])
+    except (TypeError, ValueError):
+        return jsonify({"error": "Enter a valid subject, date, time, and duration."}), 400
+    if duration_hours <= 0:
+        return jsonify({"error": "Duration must be greater than zero."}), 400
+    if not query("SELECT id FROM subjects WHERE id = ? AND user_id = ?", (subject_id, current_user_id())):
+        return jsonify({"error": "Choose one of your subjects."}), 400
+    execute("INSERT INTO sessions (user_id, subject_id, title, session_date, start_time, duration_hours, completed) VALUES (?, ?, ?, ?, ?, ?, ?)", (current_user_id(), subject_id, str(data.get("title") or "Study session").strip(), session_date, start_time, duration_hours, False))
     return jsonify({"message": "Session scheduled"}), 201
 
 
