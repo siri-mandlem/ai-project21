@@ -306,7 +306,16 @@ def goal_detail(item_id):
 @app.get("/api/sessions")
 @login_required
 def sessions():
-    return jsonify(_resource("sessions", "id, subject_id, title, session_date, start_time, duration_hours, completed", "session_date ASC, start_time ASC"))
+    rows = _resource("sessions", "id, subject_id, title, session_date, start_time, duration_hours, completed", "session_date ASC, start_time ASC")
+    # PostgreSQL returns DATE/TIME columns as Python date/time objects. Flask
+    # can serialize dates, but not bare time objects, so normalize both fields
+    # to the strings expected by the browser before building the JSON response.
+    for row in rows:
+        if row.get("session_date") is not None and hasattr(row["session_date"], "isoformat"):
+            row["session_date"] = row["session_date"].isoformat()
+        if row.get("start_time") is not None and hasattr(row["start_time"], "strftime"):
+            row["start_time"] = row["start_time"].strftime("%H:%M")
+    return jsonify(rows)
 
 
 @app.post("/api/sessions")

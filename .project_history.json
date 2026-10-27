@@ -268,7 +268,7 @@
     "render": {
       "success": true,
       "service_id": "srv-dbfpb8t9el5s73a7q37g",
-      "deploy_id": "dep-dbg5tn29lscs7394q650",
+      "deploy_id": "dep-dbgaatavcj2c73bkm4cg",
       "service_name": "ai-project21",
       "url": "https://ai-project21.onrender.com",
       "dashboard_url": "https://dashboard.render.com/web/srv-dbfpb8t9el5s73a7q37g"
@@ -278,10 +278,10 @@
       "description": "The database schema was applied to Neon, code pushed to GitHub, and Render confirmed the web service is live."
     },
     "message": "Deployment is live at https://ai-project21.onrender.com",
-    "updated_at": "2026-10-27T08:21:23.824058+00:00",
+    "updated_at": "2026-10-27T13:22:39.013223+00:00",
     "url": "https://ai-project21.onrender.com"
   },
   "status": "partial",
   "created_at": "2026-10-26T16:42:12.920936+00:00",
-  "updated_at": "2026-10-27T08:21:23.838102+00:00"
+  "updated_at": "2026-10-27T13:22:39.015786+00:00"
 }

@@ -51,6 +51,7 @@ class StudyPlannerSmokeTest(unittest.TestCase):
         response = self.client.get("/api/sessions")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json[0]["title"], "Algebra")
+        self.assertEqual(response.json[0]["start_time"], "18:00")
         response = self.client.get("/api/dashboard")
         self.assertEqual(response.status_code, 200)
         self.assertIn("subject_progress", response.json)
