@@ -22,6 +22,16 @@ class StudyPlannerSmokeTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["status"], "ok")
 
+    def test_frontend_assets_are_served(self):
+        with self.client.get("/css/style.css") as css:
+            self.assertEqual(css.status_code, 200)
+            self.assertIn("text/css", css.content_type)
+            self.assertIn(b"--purple", css.data)
+        with self.client.get("/js/script.js") as javascript:
+            self.assertEqual(javascript.status_code, 200)
+            self.assertIn("javascript", javascript.content_type)
+            self.assertIn(b"const api", javascript.data)
+
     def test_register_and_create_subject(self):
         response = self.client.post("/api/register", json={"username": "student", "password": "password123"})
         self.assertEqual(response.status_code, 201)

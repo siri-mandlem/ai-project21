@@ -145,6 +145,18 @@ def ready():
     return jsonify({"status": "ready"})
 
 
+@app.get("/css/<path:filename>")
+def frontend_css(filename):
+    """Serve frontend stylesheets from their public URL."""
+    return send_from_directory(FRONTEND / "css", filename)
+
+
+@app.get("/js/<path:filename>")
+def frontend_js(filename):
+    """Serve frontend JavaScript from its public URL."""
+    return send_from_directory(FRONTEND / "js", filename)
+
+
 @app.post("/api/register")
 def register():
     data = payload()
