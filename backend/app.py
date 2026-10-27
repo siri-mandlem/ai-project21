@@ -107,6 +107,29 @@ def init_database():
                 "ALTER TABLE users ADD COLUMN IF NOT EXISTS role "
                 "VARCHAR(50) NOT NULL DEFAULT 'student'"
             )
+            compatibility_columns = {
+                "subjects": (
+                    "user_id INTEGER",
+                    "color VARCHAR(20) NOT NULL DEFAULT '#6c63ff'",
+                    "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
+                ),
+                "goals": (
+                    "title VARCHAR(160) NOT NULL DEFAULT 'Daily study goal'",
+                    "target_hours NUMERIC(6, 2) NOT NULL DEFAULT 1",
+                    "completed_hours NUMERIC(6, 2) NOT NULL DEFAULT 0",
+                    "goal_date DATE NOT NULL DEFAULT CURRENT_DATE",
+                ),
+                "sessions": (
+                    "title VARCHAR(160) NOT NULL DEFAULT 'Study session'",
+                    "start_time TIME",
+                    "duration_hours NUMERIC(6, 2) NOT NULL DEFAULT 1",
+                    "completed BOOLEAN NOT NULL DEFAULT FALSE",
+                    "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
+                ),
+            }
+            for table, columns in compatibility_columns.items():
+                for column in columns:
+                    cursor.execute(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {column}")
 
 
 def hash_password(password: str) -> str:
